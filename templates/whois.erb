@@ -1,0 +1,10 @@
+remarks:	# <%= name %> (AS<%= @asn %>)
+<% unless defined?(ipv4).nil? -%>
+import:		from AS<%= @asn %> action pref=<%= ipv4['local-preference'] %>; accept <%= ipv4['import'] %>
+export:		to AS<%= @asn %> announce <%= ipv4['export'] %>
+<% end -%>
+<% unless defined?(ipv6).nil? -%>
+mp-import:	afi ipv6.unicast from AS<%= @asn %> action pref=<%= ipv6['local-preference'] %>; accept <%= ipv6['import'] %>
+mp-export:	afi ipv6.unicast to AS<%= @asn %> announce <%= ipv6['export'] %>
+<% end -%>
+remarks: 
