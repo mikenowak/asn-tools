@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+#
+# Mike Nowak <https://www.github.com/mikenowak/>
+#
 
 require 'yaml'
 require 'optparse'

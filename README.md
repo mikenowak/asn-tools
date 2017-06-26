@@ -8,6 +8,10 @@ In this repo included are:
 
 `whoisgen.rb` - generates import/export rules for the RIPE whois database.
 
+`filtergen.sh` - generates import filters based on the IRRDBs (RADB,RIPE,ARIN)
+
+The scripts were built with modularity in mind and so the templates are utilized to allow for easy extension.
+
 
 ## Example config file
 
@@ -58,9 +62,28 @@ router:
 
 ## Generating rules
 
+```
+Usage script.rb [options]
+    -r, --router=ROUTER              Router hostname
+    -t, --type=TYPE                  Peer type
+    -a, --as=AS                      AS Number
+    -A, --all                        Generate configuration for all peeers
+    -h, --help                       Display this screen
+
+```
+
+i.e.
 `confgen.rb -t peering -a 666 -r rtr1`
 
 ## Generating whois entries for RIPEDB
 
 `whoisen.rb`
+
+## Generating filter lists
+
+Warning: this script is an ugly hack, and a temporary solution only.
+
+`Usage: routebuilder 4|6 AS IMPORT`
+
+i.e. `filtergen.sh 4 31337 AS-ELETE`
 
