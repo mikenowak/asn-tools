@@ -40,8 +40,6 @@ set policy route-map import4-AS<%= @asn %> rule 100 match ip nexthop prefix-list
 <% unless ipv4['local-preference'].nil? -%>
 set policy route-map import4-AS<%= @asn %> rule 100 set local-preference <%= ipv4['local-preference'] %>
 <% end -%>
-set policy route-map import4-AS<%= @asn %> rule 9999 action deny
-set policy route-map import4-AS<%= @asn %> rule 9999 description 'Deny all other prefixes'
 set policy prefix-list prefix4-<%= ipv4['import'].sub(':', '--') %>
 set policy route-map export4-AS<%= @asn %> description "<%= name %> IPv6 EXPORT"
 set policy route-map export4-AS<%= @asn %> rule 1 action deny
@@ -56,8 +54,6 @@ set policy route-map export4-AS<%= @asn %> rule 100 match ip address prefix-list
 <%  unless defined?(community_out).nil? -%>
 set policy route-map export4-AS<%= @asn %> rule 100 set community <%= community_out %>
 <% end -%>
-set policy route-map export4-AS<%= @asn %> rule 9999 action deny
-set policy route-map export4-AS<%= @asn %> rule 9999 description 'Deny all other prefixes'
 set policy prefix-list prefix4-<%= ipv4['export'] %>
 <% end -%>
 <% unless defined?(ipv6).nil? -%>
@@ -103,8 +99,6 @@ set policy route-map import6-AS<%= @asn %> rule 100 match ipv6 nexthop prefix-li
 <% unless ipv6['local-preference'].nil? -%>
 set policy route-map import6-AS<%= @asn %> rule 100 set local-preference <%= ipv6['local-preference'] %>
 <% end -%>
-set policy route-map import6-AS<%= @asn %> rule 9999 action deny
-set policy route-map import6-AS<%= @asn %> rule 9999 description 'Deny all other prefixes'
 set policy prefix-list6 prefix6-<%= ipv6['import'] %>
 set policy route-map export6-AS<%= @asn %> description "<%= name %> IPv6 EXPORT"
 set policy route-map export6-AS<%= @asn %> rule 1 action deny
@@ -119,8 +113,6 @@ set policy route-map export6-AS<%= @asn %> rule 100 match ipv6 address prefix-li
 <%  unless defined?(community_out).nil? -%>
 set policy route-map export6-AS<%= @asn %> rule 100 set community <%= community_out %>
 <% end -%>
-set policy route-map export6-AS<%= @asn %> rule 9999 action deny
-set policy route-map export6-AS<%= @asn %> rule 9999 description 'Deny all other prefixes'
 set policy prefix-list6 prefix6-<%= ipv6['export'].sub(':', '--') %>
 <% end -%> 
 delete policy as-path-list path-AS<%= @asn %>
