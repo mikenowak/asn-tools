@@ -15,7 +15,7 @@ set protocols bgp <%= @ouras %> neighbor <%= ipv4['remote-ip'] %> remove-private
 <% unless ipv4['maximum-prefix'].nil? -%>
 set protocols bgp <%= @ouras %> neighbor <%= ipv4['remote-ip'] %> maximum-prefix <%= ipv4['maximum-prefix'] %>
 <% end -%>
-set firewall group address-group <%= ipv4['interface'] %>4-bgpneighbors address <%= ipv4['remote-ip'] %>
+set firewall group address-group BGP4-NEIGHBOURS address <%= ipv4['remote-ip'] %>
 delete policy route-map import4-AS<%= @asn %>
 delete policy route-map export4-AS<%= @asn %>
 delete policy prefix-list nexthop4-AS<%= @asn %>
@@ -23,16 +23,12 @@ set policy prefix-list nexthop4-AS<%= @asn %> rule 1 action permit
 set policy prefix-list nexthop4-AS<%= @asn %> rule 1 prefix <%= ipv4['remote-ip'] %>/32
 set policy route-map import4-AS<%= @asn %> description "<%= name %> IPv4 IMPORT"
 set policy route-map import4-AS<%= @asn %> rule 1 action deny
-set policy route-map import4-AS<%= @asn %> rule 1 description 'Deny IPv4 Prefixes longer than /24'
-set policy route-map import4-AS<%= @asn %> rule 1 match ip address prefix-list prefix4-LONG
+set policy route-map import4-AS<%= @asn %> rule 1 match ip address prefix-list too-long-or-too-short4
 set policy route-map import4-AS<%= @asn %> rule 2 action deny
-set policy route-map import4-AS<%= @asn %> rule 2 description 'Deny Prefixes with private AS in path'
 set policy route-map import4-AS<%= @asn %> rule 2 match as-path private
-set policy route-map import4-AS<%= @asn %> rule 99 action deny
-set policy route-map import4-AS<%= @asn %> rule 99 description 'Deny our own prefixes'
-set policy route-map import4-AS<%= @asn %> rule 99 match ip address prefix-list prefix4-<%= ipv4['export'] %>
+set policy route-map import4-AS<%= @asn %> rule 3 action deny
+set policy route-map import4-AS<%= @asn %> rule 3 match ip address prefix-list prefix4-<%= ipv4['export'] %>
 set policy route-map import4-AS<%= @asn %> rule 100 action permit
-set policy route-map import4-AS<%= @asn %> rule 100 description 'Permit Prefixes according to IRR rules'
 set policy route-map import4-AS<%= @asn %> rule 100 match ip address prefix-list prefix4-<%= ipv4['import'].sub(':', '--') %>
 set policy route-map import4-AS<%= @asn %> rule 100 match as-path path-AS<%= @asn %>
 set policy route-map import4-AS<%= @asn %> rule 100 match ip nexthop prefix-list nexthop4-AS<%= @asn %>
@@ -43,13 +39,10 @@ set policy route-map import4-AS<%= @asn %> rule 100 set local-preference <%= ipv
 set policy prefix-list prefix4-<%= ipv4['import'].sub(':', '--') %>
 set policy route-map export4-AS<%= @asn %> description "<%= name %> IPv6 EXPORT"
 set policy route-map export4-AS<%= @asn %> rule 1 action deny
-set policy route-map export4-AS<%= @asn %> rule 1 description 'Deny IPv4 Prefixes longer than /24'
-set policy route-map export4-AS<%= @asn %> rule 1 match ip address prefix-list prefix4-LONG
+set policy route-map export4-AS<%= @asn %> rule 1 match ip address prefix-list too-long-or-too-short4
 set policy route-map export4-AS<%= @asn %> rule 2 action deny
-set policy route-map export4-AS<%= @asn %> rule 2 description 'Deny Prefixes with Private AS in path'
 set policy route-map export4-AS<%= @asn %> rule 2 match as-path private
 set policy route-map export4-AS<%= @asn %> rule 100 action permit
-set policy route-map export4-AS<%= @asn %> rule 100 description 'Permit Prefixes according to IRR rules'
 set policy route-map export4-AS<%= @asn %> rule 100 match ip address prefix-list prefix4-<%= ipv4['export'] %>
 <%  unless defined?(community_out).nil? -%>
 set policy route-map export4-AS<%= @asn %> rule 100 set community <%= community_out %>
@@ -74,7 +67,7 @@ set protocols bgp <%= @ouras %> neighbor <%= ipv6['remote-ip'] %> address-family
 <% unless ipv6['maximum-prefix'].nil? -%>
 set protocols bgp <%= @ouras %> neighbor <%= ipv6['remote-ip'] %> address-family ipv6-unicast maximum-prefix <%= ipv6['maximum-prefix'] %>
 <% end -%>
-set firewall group ipv6-address-group <%= ipv6['interface']  %>6-bgpneighbors ipv6-address <%= ipv6['remote-ip'] %>
+set firewall group ipv6-address-group BGP6-NEIGHBOURS ipv6-address <%= ipv6['remote-ip'] %>
 delete policy route-map import6-AS<%= @asn %>
 delete policy route-map export6-AS<%= @asn %>
 delete policy prefix-list6 nexthop6-AS<%= @asn %>
@@ -82,16 +75,12 @@ set policy prefix-list6 nexthop6-AS<%= @asn %> rule 1 action permit
 set policy prefix-list6 nexthop6-AS<%= @asn %> rule 1 prefix <%= ipv6['remote-ip'] %>/128
 set policy route-map import6-AS<%= @asn %> description "<%= name %> IPv6 IMPORT"
 set policy route-map import6-AS<%= @asn %> rule 1 action deny
-set policy route-map import6-AS<%= @asn %> rule 1 description 'Deny IPv6 Prefixes longer than /48'
-set policy route-map import6-AS<%= @asn %> rule 1 match ipv6 address prefix-list prefix6-LONG
+set policy route-map import6-AS<%= @asn %> rule 1 match ipv6 address prefix-list too-long-or-too-short6
 set policy route-map import6-AS<%= @asn %> rule 2 action deny
-set policy route-map import6-AS<%= @asn %> rule 2 description 'Deny Prefixes with Private AS in path'
 set policy route-map import6-AS<%= @asn %> rule 2 match as-path private
-set policy route-map import6-AS<%= @asn %> rule 99 action deny
-set policy route-map import6-AS<%= @asn %> rule 99 description 'Deny our own prefixes'
-set policy route-map import6-AS<%= @asn %> rule 99 match ipv6 address prefix-list prefix6-<%= ipv6['export'] %>
+set policy route-map import6-AS<%= @asn %> rule 3 action deny
+set policy route-map import6-AS<%= @asn %> rule 3 match ipv6 address prefix-list prefix6-<%= ipv6['export'] %>
 set policy route-map import6-AS<%= @asn %> rule 100 action permit
-set policy route-map import6-AS<%= @asn %> rule 100 description 'Permit Prefixes according to IRR rules'
 set policy route-map import6-AS<%= @asn %> rule 100 match ipv6 address prefix-list prefix6-<%= ipv6['import'].sub(':', '--') %>
 set policy route-map import6-AS<%= @asn %> rule 100 match as-path path-AS<%= @asn %>
 set policy route-map import6-AS<%= @asn %> rule 100 match ipv6 nexthop prefix-list nexthop6-AS<%= @asn %>
@@ -102,13 +91,10 @@ set policy route-map import6-AS<%= @asn %> rule 100 set local-preference <%= ipv
 set policy prefix-list6 prefix6-<%= ipv6['import'] %>
 set policy route-map export6-AS<%= @asn %> description "<%= name %> IPv6 EXPORT"
 set policy route-map export6-AS<%= @asn %> rule 1 action deny
-set policy route-map export6-AS<%= @asn %> rule 1 description 'Deny IPv6 Prefixes longer than /48'
-set policy route-map export6-AS<%= @asn %> rule 1 match ipv6 address prefix-list prefix6-LONG
+set policy route-map export6-AS<%= @asn %> rule 1 match ipv6 address prefix-list too-long-or-too-short6
 set policy route-map export6-AS<%= @asn %> rule 2 action deny
-set policy route-map export6-AS<%= @asn %> rule 2 description 'Deny Prefixes with Private AS in path'
 set policy route-map export6-AS<%= @asn %> rule 2 match as-path private
 set policy route-map export6-AS<%= @asn %> rule 100 action permit
-set policy route-map export6-AS<%= @asn %> rule 100 description 'Permit Prefixes according to IRR rules'
 set policy route-map export6-AS<%= @asn %> rule 100 match ipv6 address prefix-list prefix6-<%= ipv6['export'] %>
 <%  unless defined?(community_out).nil? -%>
 set policy route-map export6-AS<%= @asn %> rule 100 set community <%= community_out %>
