@@ -23,7 +23,7 @@ set policy prefix-list nexthop4-AS<%= @asn %> rule 1 action permit
 set policy prefix-list nexthop4-AS<%= @asn %> rule 1 prefix <%= ipv4['remote-ip'] %>/32
 set policy route-map import4-AS<%= @asn %> description "<%= name %> IPv4 IMPORT"
 set policy route-map import4-AS<%= @asn %> rule 1 action deny
-set policy route-map import4-AS<%= @asn %> rule 1 match ip address prefix-list too-long-or-too-short4
+set policy route-map import4-AS<%= @asn %> rule 1 match ip address prefix-list prefix4-LONG-OR-SHORT
 set policy route-map import4-AS<%= @asn %> rule 2 action deny
 set policy route-map import4-AS<%= @asn %> rule 2 match as-path private
 set policy route-map import4-AS<%= @asn %> rule 3 action deny
@@ -39,7 +39,7 @@ set policy route-map import4-AS<%= @asn %> rule 100 set local-preference <%= ipv
 set policy prefix-list prefix4-<%= ipv4['import'].sub(':', '--') %>
 set policy route-map export4-AS<%= @asn %> description "<%= name %> IPv6 EXPORT"
 set policy route-map export4-AS<%= @asn %> rule 1 action deny
-set policy route-map export4-AS<%= @asn %> rule 1 match ip address prefix-list too-long-or-too-short4
+set policy route-map export4-AS<%= @asn %> rule 1 match ip address prefix-list prefix4-LONG-OR-SHORT
 set policy route-map export4-AS<%= @asn %> rule 2 action deny
 set policy route-map export4-AS<%= @asn %> rule 2 match as-path private
 set policy route-map export4-AS<%= @asn %> rule 100 action permit
@@ -75,7 +75,7 @@ set policy prefix-list6 nexthop6-AS<%= @asn %> rule 1 action permit
 set policy prefix-list6 nexthop6-AS<%= @asn %> rule 1 prefix <%= ipv6['remote-ip'] %>/128
 set policy route-map import6-AS<%= @asn %> description "<%= name %> IPv6 IMPORT"
 set policy route-map import6-AS<%= @asn %> rule 1 action deny
-set policy route-map import6-AS<%= @asn %> rule 1 match ipv6 address prefix-list too-long-or-too-short6
+set policy route-map import6-AS<%= @asn %> rule 1 match ipv6 address prefix-list prefix6-LONG-OR-SHORT
 set policy route-map import6-AS<%= @asn %> rule 2 action deny
 set policy route-map import6-AS<%= @asn %> rule 2 match as-path private
 set policy route-map import6-AS<%= @asn %> rule 3 action deny
@@ -91,7 +91,7 @@ set policy route-map import6-AS<%= @asn %> rule 100 set local-preference <%= ipv
 set policy prefix-list6 prefix6-<%= ipv6['import'] %>
 set policy route-map export6-AS<%= @asn %> description "<%= name %> IPv6 EXPORT"
 set policy route-map export6-AS<%= @asn %> rule 1 action deny
-set policy route-map export6-AS<%= @asn %> rule 1 match ipv6 address prefix-list too-long-or-too-short6
+set policy route-map export6-AS<%= @asn %> rule 1 match ipv6 address prefix-list prefix6-LONG-OR-SHORT
 set policy route-map export6-AS<%= @asn %> rule 2 action deny
 set policy route-map export6-AS<%= @asn %> rule 2 match as-path private
 set policy route-map export6-AS<%= @asn %> rule 100 action permit
