@@ -15,6 +15,12 @@ set protocols bgp <%= @ouras %> neighbor <%= ipv4['remote-ip'] %> remove-private
 <% unless ipv4['maximum-prefix'].nil? -%>
 set protocols bgp <%= @ouras %> neighbor <%= ipv4['remote-ip'] %> maximum-prefix <%= ipv4['maximum-prefix'] %>
 <% end -%>
+<% unless ipv4['interval'].nil? -%>
+set protocols bgp <%= @ouras %> neighbor <%= ipv4['remote-ip'] %> advertisement-interval <%= ipv4['interval'] %>
+<% end -%>
+<% unless ipv4['multihop'].nil? -%>
+set protocols bgp <%= @ouras %> neighbor <%= ipv4['remote-ip'] %> ebgp-multihop <%= ipv4['multihop'] %>
+<% end -%>
 set firewall group address-group BGP4-NEIGHBOURS address <%= ipv4['remote-ip'] %>
 delete policy route-map import4-AS<%= @asn %>
 delete policy route-map export4-AS<%= @asn %>
@@ -66,6 +72,12 @@ set protocols bgp <%= @ouras %> neighbor <%= ipv6['remote-ip'] %> update-source 
 set protocols bgp <%= @ouras %> neighbor <%= ipv6['remote-ip'] %> address-family ipv6-unicast remove-private-as
 <% unless ipv6['maximum-prefix'].nil? -%>
 set protocols bgp <%= @ouras %> neighbor <%= ipv6['remote-ip'] %> address-family ipv6-unicast maximum-prefix <%= ipv6['maximum-prefix'] %>
+<% end -%>
+<% unless ipv6['interval'].nil? -%>
+set protocols bgp <%= @ouras %> neighbor <%= ipv6['remote-ip'] %> advertisement-interval <%= ipv6['interval'] %>
+<% end -%>
+<% unless ipv6['multihop'].nil? -%>
+set protocols bgp <%= @ouras %> neighbor <%= ipv6['remote-ip'] %> ebgp-multihop <%= ipv6['multihop'] %>
 <% end -%>
 set firewall group ipv6-address-group BGP6-NEIGHBOURS ipv6-address <%= ipv6['remote-ip'] %>
 delete policy route-map import6-AS<%= @asn %>
